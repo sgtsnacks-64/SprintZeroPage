@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Sprint-Zero Podcast</title>
+    <style>
+        body {
+            background-color: #2A00FF;
+            font-family: 'Comic Sans MS', 'Chalkboard SE', 'Helvetica', 'Arial', 'sans-serif';
+        }
+        #logo {
+            display: block;
+            margin-left: auto;
+            margin-right: auto;
+            width: 50%;
+        }
+        #rss-feed {
+            margin: 50px;
+        }
+    </style>
+</head>
+<body>
+    <img id="logo" src="logo.png" alt="Logo">
+    <div id="rss-feed"></div>
+
+    <script>
+        // Replace with your RSS feed URL
+        const RSS_URL = "https://media.zencast.fm/sprint-zero/rss";
+
+        fetch(RSS_URL)
+            .then(response => response.text())
+            .then(str => new window.DOMParser().parseFromString(str, "text/xml"))
+            .then(data => {
+                const items = data.querySelectorAll("item");
+                let html = ``;
+                items.forEach(el => {
+                    html += `
+                        <div>
+                            <h2><a href="${el.querySelector("link").innerHTML}">${el.querySelector("title").innerHTML}</a></h2>
+                            <p>${el.querySelector("description").innerHTML}</p>
+                        </div>
+                    `;
+                });
+                document.querySelector("#rss-feed").innerHTML = html;
+            });
+    </script>
+</body>
+</html>
